@@ -17,7 +17,6 @@ def preprocess_text(text):
     text = stemmer.stem(text)  # Stemming
     return text
 
-
 # Main page function
 def main():
     st.sidebar.image('logo.png', use_column_width=True)
@@ -29,25 +28,32 @@ def main():
     userText = st.text_input('Masukkan Tweet:', placeholder='Paste tweet terkait Pemilu 2024 di sini...')
     
     # Button for sentiment analysis
-                # Preprocess the text
-    text_clean = preprocess_text(userText)
+    if userText:
+        # Preprocess the text
+        text_clean = preprocess_text(userText)
 
-    # Transform text with the model and predict sentiment
-    text_vector = modelsvc_loaded['vectorizer'].transform([text_clean])
-    prediction_proba = modelsvc_loaded['classifier'].predict_proba(text_vector)
+        # Transform text with the model and predict sentiment
+        text_vector = modelsvc_loaded['vectorizer'].transform([text_clean])
+        prediction_proba = modelsvc_loaded['classifier'].predict_proba(text_vector)
                 
-    # Determine sentiment label
-    sentiment_label = 'positif' if proba_positif >= 0.5 else 'negatif'
+        # Get the probability of the positive class
+        proba_positif = prediction_proba[0][1]
 
-    # Load corresponding image
-    if sentiment_label == 'positif':
-    image = Image.open('./images/positive.png')
-    else:
-    image = Image.open('./images/negative.png')
-    image = image.resize((int(image.width / 2), int(image.height / 2)))
+        # Determine sentiment label
+        sentiment_label = 'positif' if proba_positif >= 0.5 else 'negatif'
 
+        # Load corresponding image
+        if sentiment_label == 'positif':
+            image = Image.open('./images/positive.png')
+        else:
+            image = Image.open('./images/negative.png')
+        image = image.resize((int(image.width / 2), int(image.height / 2)))
+
+        # Display results
+        st.image(image, caption=f"Sentimen: {sentiment_label}")
+        st.write(f"Probabilitas Sentimen Positif: {proba_positif:.2f}")
     else:
-    st.warning('Masukkan teks untuk menganalisis.')
+        st.warning('Masukkan teks untuk menganalisis.')
 
 if __name__ == '__main__':
     main()

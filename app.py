@@ -4,7 +4,7 @@ import re
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 from PIL import Image
 
-# Load model from .pkl file
+# Load models from .pkl files
 with open('dataset.pkl', 'rb') as model_file:
     modelsvc_loaded = pickle.load(model_file)
 
@@ -17,6 +17,12 @@ def preprocess_text(text):
     text = stemmer.stem(text)  # Stemming
     return text
 
+# Buzzer detection function
+def detect_buzzer(text):
+    # Implement your buzzer detection logic here
+    # Example: return True if detected, else False
+    pass
+
 # Main page function
 def main():
     st.sidebar.image('logo.png', use_column_width=True)
@@ -27,6 +33,9 @@ def main():
     # Input text from user
     userText = st.text_input('Masukkan Tweet:', placeholder='Paste tweet terkait Pemilu 2024 di sini...')
     
+    # Checkbox for buzzer detection
+    detect_buzzer_option = st.checkbox('Deteksi Buzzer')
+    
     # Button for sentiment analysis
     if st.button('Analisis'):
         if userText:
@@ -36,10 +45,10 @@ def main():
             # Transform text with the model and predict sentiment
             text_vector = modelsvc_loaded['vectorizer'].transform([text_clean])
             prediction_proba = modelsvc_loaded['classifier'].predict_proba(text_vector)
-                    
+            
             # Get the probability of the positive class
             proba_positif = prediction_proba[0][1]
-
+            
             # Determine sentiment label
             sentiment_label = 'positif' if proba_positif >= 0.5 else 'negatif'
 
@@ -50,14 +59,15 @@ def main():
                 image = Image.open('./images/negative.png')
             image = image.resize((int(image.width / 2), int(image.height / 2)))
 
-            # Display results
-            st.image(image, caption=f"Sentimen: {sentiment_label}")
-            st.write(f"Probabilitas Sentimen Positif: {proba_positif:.2f}")
-
-            # Button to reload for new analysis
-            if st.button('Analisis Baru'):
-                st.experimental_rerun()
-
+            # Display sentiment analysis results
+            st.image(image, caption=sentiment_label)
+            
+            # Buzzer detection analysis
+            if detect_buzzer_option:
+                buzzer_detected = detect_buzzer(userText)
+                st.write('Deteksi Buzzer:', 'Ya' if buzzer_detected else 'Tidak')
+                
+            st.button('Reload')  # Button for new analysis
         else:
             st.warning('Masukkan teks untuk menganalisis.')
 

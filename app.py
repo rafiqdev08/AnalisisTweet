@@ -29,12 +29,6 @@ def main():
     userText = st.text_input('Masukkan Tweet:', placeholder='Paste tweet terkait Pemilu 2024 di sini...')
     
     # Button for sentiment analysis
-    if st.button('Analisis Sentimen'):
-        if userText:
-            # Detect language
-            lang = detect_language(userText)
-            
-            if lang == 'id':
                 # Preprocess the text
                 text_clean = preprocess_text(userText)
 

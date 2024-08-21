@@ -30,9 +30,9 @@ def main():
     
     # Button for sentiment analysis
                 # Preprocess the text
-                text_clean = preprocess_text(userText)
+    text_clean = preprocess_text(userText)
 
-                # Transform text with the model and predict sentiment
+    # Transform text with the model and predict sentiment
                 text_vector = modelsvc_loaded['vectorizer'].transform([text_clean])
                 prediction_proba = modelsvc_loaded['classifier'].predict_proba(text_vector)
                 

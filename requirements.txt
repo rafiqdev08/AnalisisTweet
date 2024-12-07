@@ -7,8 +7,3 @@ pip==24.0
 langid==1.1.6
 nltk==3.8.1 
 Pillow==9.3.0
-
-git add requirements.txt
-git commit -m "Update requirements.txt untuk menambahkan nltk dan Pillow"
-git push
-

@@ -8,6 +8,10 @@ from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+import nltk
+nltk.download('punkt')  # Unduh tokenizer untuk word_tokenize
+nltk.download('stopwords')  # Jika Anda menggunakan stopwords
+
 
 # Menambahkan link ke CDN Font Awesome
 st.markdown("""
